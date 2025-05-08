@@ -1,0 +1,8 @@
+# Arquivos ignorados pelo Git 
+WeatherForecast.cs
+WeatherForecastController.cs
+Migrations
+bin
+obj
+.vs
+

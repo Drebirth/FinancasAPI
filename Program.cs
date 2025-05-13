@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Projeto_FinancasAPI.Context;
+using Projeto_FinancasAPI.Repository.Categorias;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer")));
 //builder.Services.AddDbContext<AppDbContext>(options =>
 //options.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSqlite")));
+
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();    
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

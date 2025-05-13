@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto_FinancasAPI.Context;
 using Projeto_FinancasAPI.Models;
+using Projeto_FinancasAPI.Repository.Categorias;
 
 namespace Projeto_FinancasAPI.Controllers
 {
@@ -10,24 +11,27 @@ namespace Projeto_FinancasAPI.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        //private readonly AppDbContext _context;
+        private readonly ICategoriaRepository _repository;
 
-        public CategoriasController(AppDbContext context)
+        public CategoriasController(ICategoriaRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpGet(Name = "GetCategorias")]
         public async Task<IActionResult> Get()
         {
-            var categorias = await _context.Categorias.ToListAsync();
+            //var categorias = await _context.Categorias.ToListAsync();
+            var categorias = await _repository.GetAllAsync();
             return Ok(categorias);
         }
 
         [HttpGet("{id}", Name = "GetCategoria")]
         public async Task<IActionResult> Get(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
+            //var categoria = await _context.Categorias.FindAsync(id);
+            var categoria =  await _repository.GetCategoriaAsync(id);
             if (categoria == null)
             {
                 return NotFound("Categoria não encontrada, favor tentar novamente!");
@@ -42,8 +46,10 @@ namespace Projeto_FinancasAPI.Controllers
             {
                 return BadRequest();
             }
-            _context.Categorias.Add(categoria);
-            await _context.SaveChangesAsync();
+            //_context.Categorias.Add(categoria);
+            //await _context.SaveChangesAsync();
+            await _repository.AddCategoriaAsync(categoria);
+            
             return new CreatedAtRouteResult("GetCategoria", new { id = categoria.Id }, categoria);
         }
 
@@ -54,25 +60,28 @@ namespace Projeto_FinancasAPI.Controllers
             {
                 return BadRequest();
             }
-            if (!await _context.Categorias.AnyAsync(x => x.Id == id))
-            {
-                return NotFound("Categoria não encontrada, favor tentar novamente!");
-            }
-            _context.Entry(categoria).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            //if (!await _context.Categorias.AnyAsync(x => x.Id == id))
+            //{
+            //    return NotFound("Categoria não encontrada, favor tentar novamente!");
+            //}
+            //_context.Entry(categoria).State = EntityState.Modified;
+            //await _context.SaveChangesAsync();
+          
+            await _repository.UpdateCategoriaAsync(categoria);
             return Ok("Categoria atualizada com sucesso!");
         }
 
         [HttpDelete("{id}", Name = "DeleteCategoria")]
         public async Task<IActionResult> Delete(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
-            {
-                return NotFound("Categoria não encontrada, favor tentar novamente!");
-            }
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
+            //var categoria = await _context.Categorias.FindAsync(id);
+            //if (categoria == null)
+            //{
+            //    return NotFound("Categoria não encontrada, favor tentar novamente!");
+            //}
+            //_context.Categorias.Remove(categoria);
+            //await _context.SaveChangesAsync();
+            var categoria = await _repository.DeleteCategoriaAsync(id);
             return Ok("Categoria removida com sucesso!");
         }
     }

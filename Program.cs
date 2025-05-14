@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Projeto_FinancasAPI.Context;
+using Projeto_FinancasAPI.Models;
+using Projeto_FinancasAPI.Repository;
 using Projeto_FinancasAPI.Repository.Categorias;
+using Projeto_FinancasAPI.Services.Categoria;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +18,10 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer
 //builder.Services.AddDbContext<AppDbContext>(options =>
 //options.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSqlite")));
 
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();    
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<CategoriaService>();
+
 
 var app = builder.Build();
 

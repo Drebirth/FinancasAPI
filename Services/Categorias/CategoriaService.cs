@@ -1,8 +1,9 @@
 ﻿using Projeto_FinancasAPI.Repository.Categorias;
 using Projeto_FinancasAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace Projeto_FinancasAPI.Services.Categoria
+namespace Projeto_FinancasAPI.Services.Categorias
 {
     public class CategoriaService
     {
@@ -13,13 +14,13 @@ namespace Projeto_FinancasAPI.Services.Categoria
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Models.Categoria>> GetAllAsync()
+        public async Task<IEnumerable<Categoria>> GetAllAsync()
         {
             var categorias = await _repository.GetAllAsync();
             return categorias;
         }
 
-        public async Task<Models.Categoria?> GetCategoriaAsync(int id)
+        public async Task<Categoria?> GetCategoriaAsync(int id)
         {
             var categoria = await _repository.GetAsync(id);
             if (categoria == null)
@@ -29,7 +30,7 @@ namespace Projeto_FinancasAPI.Services.Categoria
             return categoria;
         }
 
-        public async Task<Models.Categoria> CreateCategoriaAsync(Models.Categoria categoria)
+        public async Task<Categoria> CreateCategoriaAsync(Categoria categoria)
         {
             if (categoria is null)
             {
@@ -40,8 +41,9 @@ namespace Projeto_FinancasAPI.Services.Categoria
             return categoria;
         }
 
-        public async Task<Models.Categoria> UpdateCategoriaAsync(int id, Models.Categoria categoria)
+        public async Task<Categoria> UpdateCategoriaAsync(int id, Categoria categoria)
         {
+            
 
             if (id != categoria.Id)
             {

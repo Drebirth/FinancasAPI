@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Projeto_FinancasAPI.Context;
 using Projeto_FinancasAPI.Models;
 using Projeto_FinancasAPI.Repository.Categorias;
-using Projeto_FinancasAPI.Services.Categoria;
+using Projeto_FinancasAPI.Services.Categorias;
 
 namespace Projeto_FinancasAPI.Controllers
 {

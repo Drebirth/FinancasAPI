@@ -3,7 +3,9 @@ using Projeto_FinancasAPI.Context;
 using Projeto_FinancasAPI.Models;
 using Projeto_FinancasAPI.Repository;
 using Projeto_FinancasAPI.Repository.Categorias;
-using Projeto_FinancasAPI.Services.Categoria;
+using Projeto_FinancasAPI.Repository.Contas;
+using Projeto_FinancasAPI.Services.Categorias;
+using Projeto_FinancasAPI.Services.Contas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,9 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer
 
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 //builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IContaRepository, ContaRepository>();
 builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<ContaService>();
 
 
 var app = builder.Build();

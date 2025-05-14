@@ -2,13 +2,8 @@
 
 namespace Projeto_FinancasAPI.Repository.Contas
 {
-    public interface IContaRepository
+    public interface IContaRepository: IRepository<Conta> 
     {
-        Task<IEnumerable<Conta>> GetContasAsync();
-        Task<Conta> GetContaByIdAsync(int id);
-        Task<Conta> AddContaAsync(Conta conta);
-        Task<Conta> UpdateContaAsync(Conta conta);
-        //Task<bool> DeleteContaAsync(int id);    
-        Task<Conta> DeleteContaAsync(int id);
+        Task<string> GetUsuarioExiste(string usuario);
     }
 }

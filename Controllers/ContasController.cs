@@ -46,35 +46,27 @@ namespace Projeto_FinancasAPI.Controllers
 
         }
 
-        //[HttpPut("{id}", Name = "PutConta")]
-        //public async Task<IActionResult> Put(int id, Conta conta)
-        //{
-        //    if (id != conta.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{id}", Name = "PutConta")]
+        public async Task<IActionResult> Put(int id, Conta conta)
+        {
+            await _service.UpdateContaAsync(id, conta);
 
-        //    if (!await _context.Contas.AnyAsync(x => x.Id == id))
-        //    {
-        //        return NotFound("Conta não encontrada, favor tentar novamente!");
-        //    }
+            return Ok("Dados atualizados");
+        }
 
-        //    _context.Entry(conta).State = EntityState.Modified;
-        //    await _context.SaveChangesAsync();
-        //    return Ok("Conta atualizada com sucesso!");
-        //}
-
-        //[HttpDelete("{id}", Name = "DeleteConta")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var conta = await _context.Contas.FindAsync(id);
-        //    if (conta == null)
-        //    {
-        //        return NotFound("Conta não encontrada, favor tentar novamente!");
-        //    }
-        //    _context.Contas.Remove(conta);
-        //    await _context.SaveChangesAsync();
-        //    return Ok("Conta excluída com sucesso!");
-        //}
+        [HttpDelete("{id}", Name = "DeleteConta")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            //var conta = await _context.Contas.FindAsync(id);
+            //if (conta == null)
+            //{
+            //    return NotFound("Conta não encontrada, favor tentar novamente!");
+            //}
+            //_context.Contas.Remove(conta);
+            //await _context.SaveChangesAsync();
+            //return Ok("Conta excluída com sucesso!");
+            await _service.DeleteContaAsync(id);
+            return Content("Conta excluída com sucesso!");
+        }
     }
 }

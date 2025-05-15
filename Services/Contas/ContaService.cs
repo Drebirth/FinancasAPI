@@ -31,7 +31,7 @@ namespace Projeto_FinancasAPI.Services.Contas
         public async Task<Conta> CreateContaAsync(Conta conta)
         {
             var usuario = await _repository.GetUsuarioExiste(conta.Usuario);
-            
+
             if (conta is null)
             {
                 throw new Exception("Dados enviados estão vazios, favor verificar os dados e efetuar o envio novamente!");
@@ -47,6 +47,34 @@ namespace Projeto_FinancasAPI.Services.Contas
 
             }
             return conta;
+        }
+
+        public async Task<Conta> UpdateContaAsync(int id, Conta conta)
+        {
+            if (conta == null || id != conta.Id)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+            else
+            {
+                await _repository.UpdateAsync(conta);
+
+            }
+
+            return conta;
+        }
+
+        public async Task DeleteContaAsync(int id)
+        {
+            var conta = await _repository.GetAsync(id);
+            if (conta == null)
+            {
+                throw new KeyNotFoundException("Conta não encontrada, favor tentar novamente!");
+            }
+            else
+            {
+                await _repository.DeleteAsync(conta);
+            }
         }
     }
 }

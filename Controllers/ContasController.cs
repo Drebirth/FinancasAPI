@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Projeto_FinancasAPI.Context;
 using Projeto_FinancasAPI.Models;
-using Projeto_FinancasAPI.Services.Categorias;
 using Projeto_FinancasAPI.Services.Contas;
 
 namespace Projeto_FinancasAPI.Controllers

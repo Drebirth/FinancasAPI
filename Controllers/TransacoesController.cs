@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto_FinancasAPI.Context;
 using Projeto_FinancasAPI.Models;
+using Projeto_FinancasAPI.Services.Transacoes;
+
 
 namespace Projeto_FinancasAPI.Controllers
 {
@@ -10,17 +12,18 @@ namespace Projeto_FinancasAPI.Controllers
     [ApiController]
     public class TransacoesController : ControllerBase
     {
-        private readonly AppDbContext _context;
 
-        public TransacoesController(AppDbContext context)
+        private readonly TransacoesService _services;
+
+        public TransacoesController(TransacoesService services)
         {
-            _context = context;
+            _services = services;
         }
 
         [HttpGet(Name ="GetTransacao")]
         public async Task<IActionResult> Get()
         {
-            var transacoes = await _context.Transacoes.ToListAsync();
+            var transacoes = await _services.GetAllAsync();
             return Ok(transacoes);  
 
         }
@@ -28,10 +31,10 @@ namespace Projeto_FinancasAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Transacao transacao)
         {
-             _context.Transacoes.Add(transacao);
-            await _context.SaveChangesAsync();
+             
+            await _services.CreateTransacaoAsync(transacao);
             return new CreatedAtRouteResult("GetTransacao", new {id = transacao.Id}, transacao);
-            //return new CreatedAtRouteResult("GetCategoria", new { id = categoria.Id }, categoria);
+            
         }
     }
 }

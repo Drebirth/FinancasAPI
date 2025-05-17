@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Projeto_FinancasAPI.Models;
@@ -8,6 +9,7 @@ namespace Projeto_FinancasAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class ContasController : ControllerBase
     {
         //private readonly AppDbContext _context;
@@ -18,6 +20,9 @@ namespace Projeto_FinancasAPI.Controllers
             _service = service;
         }
 
+
+
+        [Authorize]
         [HttpGet(Name = "GetContas")]
         public async Task<IActionResult> Get()
         {
@@ -54,14 +59,7 @@ namespace Projeto_FinancasAPI.Controllers
         [HttpDelete("{id}", Name = "DeleteConta")]
         public async Task<IActionResult> Delete(int id)
         {
-            //var conta = await _context.Contas.FindAsync(id);
-            //if (conta == null)
-            //{
-            //    return NotFound("Conta não encontrada, favor tentar novamente!");
-            //}
-            //_context.Contas.Remove(conta);
-            //await _context.SaveChangesAsync();
-            //return Ok("Conta excluída com sucesso!");
+            
             await _service.DeleteContaAsync(id);
             return Content("Conta excluída com sucesso!");
         }

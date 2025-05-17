@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Projeto_FinancasAPI.Models
 {
@@ -21,7 +22,16 @@ namespace Projeto_FinancasAPI.Models
             get { return _usuario; }
             set { _usuario = value; }
         }
-        [Column(TypeName = "decimal(18,2)")]
+
+
+        [Required]
+        public string? Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string? Senha { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]     
         public decimal Saldo
         {
             get { return _saldo; }

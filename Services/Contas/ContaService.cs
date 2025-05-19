@@ -23,7 +23,7 @@ namespace Projeto_FinancasAPI.Services.Contas
             var conta = await _repository.GetAsync(id);
             if (conta == null)
             {
-                throw new KeyNotFoundException("Conta não encontrada, favor tentar novamente!");
+                throw new Exception("Conta não encontrada, favor tentar novamente!");
             }
             return conta;
         }
@@ -69,7 +69,7 @@ namespace Projeto_FinancasAPI.Services.Contas
             var conta = await _repository.GetAsync(id);
             if (conta == null)
             {
-                throw new KeyNotFoundException("Conta não encontrada, favor tentar novamente!");
+                throw new Exception("Conta não encontrada, favor tentar novamente!");
             }
             else
             {

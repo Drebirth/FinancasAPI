@@ -36,10 +36,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/login"; // Redireciona para a página de login
-        options.AccessDeniedPath = "/acesso-negado"; // Página de acesso negado
+        //options.LoginPath = "/login"; // Redireciona para a página de login
+        //options.AccessDeniedPath = "/acesso-negado"; // Página de acesso negado
         options.Cookie.HttpOnly = true; // Protege contra acesso via JavaScript
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Apenas HTTPS
+        options.Cookie.Expiration = TimeSpan.FromMinutes(10); // Duração do cookie
     });
 
 

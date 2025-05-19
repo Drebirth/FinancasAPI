@@ -1,16 +1,22 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Projeto_FinancasAPI.Context;
+using Projeto_FinancasAPI.Models;
 using Projeto_FinancasAPI.Repository.Categorias;
 using Projeto_FinancasAPI.Repository.Contas;
 using Projeto_FinancasAPI.Repository.Transacoes;
+using Projeto_FinancasAPI.Services;
 using Projeto_FinancasAPI.Services.Categorias;
 using Projeto_FinancasAPI.Services.Contas;
 using Projeto_FinancasAPI.Services.Transacoes;
 using System.Data;
 using System.Net;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +26,39 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle  
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {
+        Title = "Projeto Finanças API",
+        Version = "v1",
+        Description = "API para gerenciamento de finanças pessoais"
+    });
+
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Bearer JWT",
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer")));
 
@@ -31,22 +69,38 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer
 //   .AddEntityFrameworkStores<AppDbContext>(); // Corrigido com a referência necessária  
 
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-        .AddEntityFrameworkStores<AppDbContext>();
-//    .AddDefaultTokenProviders();  
+builder.Services.AddIdentity<AplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();  
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+
+
+
+
+var secretKey = Convert.FromBase64String(builder.Configuration["JWT:SecretKey"]) ?? throw new ArgumentException("Invalid Secret Key!");
+
+builder.Services.AddAuthentication( options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(options =>
     {
-        //options.LoginPath = "/login"; // Redireciona para a página de login
-        //options.AccessDeniedPath = "/acesso-negado"; // Página de acesso negado
-        options.Cookie.HttpOnly = true; // Protege contra acesso via JavaScript
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Apenas HTTPS
-        //options.Cookie.Expiration = TimeSpan.FromMinutes(1); // Duração do cookie
-        Cookie meuCookie = new Cookie("meuCookie", "valorDoCookie");
-        meuCookie.Expires = DateTime.Now.AddMinutes(1); // Define a expiração do cookie para 1 dia
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false; // em producao como TRUE
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+            ValidIssuer = builder.Configuration["JWT:ValidAudience"],
+            ValidAudience = builder.Configuration["JWT:ValidIssuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+        };
     });
 
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 //builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));  
@@ -55,6 +109,7 @@ builder.Services.AddScoped<ITransacoesRepository, TransacoesRepository>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ContaService>();
 builder.Services.AddScoped<TransacoesService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

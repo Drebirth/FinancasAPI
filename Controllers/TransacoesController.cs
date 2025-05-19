@@ -11,7 +11,7 @@ namespace Projeto_FinancasAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TransacoesController : ControllerBase
     {
 
@@ -22,10 +22,11 @@ namespace Projeto_FinancasAPI.Controllers
             _services = services;
         }
 
-        [HttpGet(Name ="GetTransacao")]
-        public async Task<IActionResult> Get()
+        [HttpGet("{id}", Name ="GetTransacao")]
+        public async Task<IActionResult> Get(int id)
         {
-            var transacoes = await _services.GetAllAsync();
+            var transacoes = await _services.GetAllFindByIdUser(id);
+            
             return Ok(transacoes);  
 
         }

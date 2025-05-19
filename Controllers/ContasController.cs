@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Projeto_FinancasAPI.Models;
 using Projeto_FinancasAPI.Services.Contas;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Projeto_FinancasAPI.Controllers
 {
@@ -29,12 +30,19 @@ namespace Projeto_FinancasAPI.Controllers
         }
 
         [HttpPost(Name = "PostConta")]
+        [SwaggerIgnore]
         public async Task<IActionResult> Post(Conta conta)
         {                   
             await _service.CreateContaAsync(conta);
             
             return new CreatedAtRouteResult("GetContas", new { id = conta.Id }, conta);
 
+        }
+
+        [HttpGet("{id}", Name = "GetConta")]
+        public async Task<IActionResult> Get(int id)
+        {
+            return Ok(await _service.GetContaAsync(id));
         }
 
         [HttpPut("{id}", Name = "PutConta")]

@@ -2,6 +2,8 @@
 using Projeto_FinancasAPI.Models;
 using System.Collections.Generic;
 using Projeto_FinancasAPI.Repository.Contas;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Projeto_FinancasAPI.Services.Transacoes
 {
@@ -16,9 +18,17 @@ namespace Projeto_FinancasAPI.Services.Transacoes
             _contaRepository = conta;
         }
 
-        public async Task<IEnumerable<Transacao>> GetAllAsync()
+        public async Task<IEnumerable<Transacao>> GetAllFindByIdUser(int id)
         {
-            return await _repository.GetAllAsync();
+            var transacoes = await _repository.GetAllFindByIdUser(id);
+
+            if(transacoes != null)
+            {
+                return transacoes;
+            }
+            
+            return null;
+            //return await _repository.GetAllAsync();
         }
 
         public async Task<Transacao> GetByIdAsync(int id)

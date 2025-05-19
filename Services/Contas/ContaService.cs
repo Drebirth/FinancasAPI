@@ -1,4 +1,5 @@
-﻿using Projeto_FinancasAPI.Models;
+﻿using Projeto_FinancasAPI.DTOs;
+using Projeto_FinancasAPI.Models;
 using Projeto_FinancasAPI.Repository.Contas;
 
 namespace Projeto_FinancasAPI.Services.Contas
@@ -12,20 +13,46 @@ namespace Projeto_FinancasAPI.Services.Contas
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Conta>> GetContasAsync()
+        public async Task<IEnumerable<ContaDTO>> GetContasAsync()
         {
-            var contas = await _repository.GetAllAsync();
-            return contas;
+            //var contas = await _repository.GetAllAsync();
+            //return contas;
+
+            var contasDTO = new List<ContaDTO>();
+            foreach(var conta in await _repository.GetAllAsync())
+            {
+                var contaDTO = new ContaDTO
+                {
+                    Id = conta.Id,
+                    Usuario = conta.Usuario,                   
+                    Saldo = conta.Saldo
+                };
+                contasDTO.Add(contaDTO);
+            }
+            return contasDTO;
         }
 
-        public async Task<Conta?> GetContaAsync(int id)
+        public async Task<ContaDTO?> GetContaAsync(int id)
         {
+            //var conta = await _repository.GetAsync(id);
+            //if (conta == null)
+            //{
+            //    throw new Exception("Conta não encontrada, favor tentar novamente!");
+            //}
+            //return conta;
+            var contaDTO = new ContaDTO();
             var conta = await _repository.GetAsync(id);
             if (conta == null)
             {
                 throw new Exception("Conta não encontrada, favor tentar novamente!");
             }
-            return conta;
+            else
+            {
+                contaDTO.Id = conta.Id;
+                contaDTO.Usuario = conta.Usuario;
+                contaDTO.Saldo = conta.Saldo;
+            }
+            return contaDTO;
         }
 
         public async Task<Conta> CreateContaAsync(Conta conta)

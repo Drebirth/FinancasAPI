@@ -9,6 +9,8 @@ using Projeto_FinancasAPI.Repository.Transacoes;
 using Projeto_FinancasAPI.Services.Categorias;
 using Projeto_FinancasAPI.Services.Contas;
 using Projeto_FinancasAPI.Services.Transacoes;
+using System.Data;
+using System.Net;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,7 +42,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         //options.AccessDeniedPath = "/acesso-negado"; // Página de acesso negado
         options.Cookie.HttpOnly = true; // Protege contra acesso via JavaScript
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Apenas HTTPS
-        options.Cookie.Expiration = TimeSpan.FromMinutes(10); // Duração do cookie
+        //options.Cookie.Expiration = TimeSpan.FromMinutes(1); // Duração do cookie
+        Cookie meuCookie = new Cookie("meuCookie", "valorDoCookie");
+        meuCookie.Expires = DateTime.Now.AddMinutes(1); // Define a expiração do cookie para 1 dia
     });
 
 

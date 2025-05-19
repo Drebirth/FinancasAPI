@@ -8,7 +8,9 @@ namespace Projeto_FinancasAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public string NomeCategoria { get; set; }
+
+        [MaxLength(30)]
+        public string? NomeCategoria { get; set; }
        
     }
 }

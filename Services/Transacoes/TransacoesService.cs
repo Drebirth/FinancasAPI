@@ -28,7 +28,7 @@ namespace Projeto_FinancasAPI.Services.Transacoes
             }
             
             return null;
-            //return await _repository.GetAllAsync();
+            
         }
 
         public async Task<Transacao> GetByIdAsync(int id)
@@ -73,11 +73,7 @@ namespace Projeto_FinancasAPI.Services.Transacoes
             if (transacao.Valor <= 0)
             {
                 throw new ArgumentException("O valor da transação deve ser maior que zero.", nameof(transacao.Valor));
-            }
-
-           
-            
-
+            }                      
             transacao.DataTransacao = DateTime.Now;
             await _repository.CreateAsync(transacao);
 

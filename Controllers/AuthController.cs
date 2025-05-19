@@ -126,8 +126,7 @@ namespace Projeto_FinancasAPI.Controllers
             await _service.CreateContaAsync(new Conta
             {
                 Usuario = cadastro.Usuario,
-                Email = cadastro.Email,
-                Senha = cadastro.Senha,
+                Email = cadastro.Email,                
                 Saldo = 0
             });
             if (result.Errors.Any())

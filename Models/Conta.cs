@@ -27,9 +27,6 @@ namespace Projeto_FinancasAPI.Models
         [Required]
         public string? Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string? Senha { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]     
         public decimal Saldo

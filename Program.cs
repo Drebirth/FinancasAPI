@@ -59,11 +59,12 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer")));
 
-//builder.Services.AddDbContext<AppDbContext>(options =>  
-//options.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSqlite")));  
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoSqlServer")));
+
+builder.Services.AddDbContext<AppDbContext>(options =>  
+options.UseSqlite(builder.Configuration.GetConnectionString("ConexaoSqlite")));  
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //   .AddEntityFrameworkStores<AppDbContext>(); // Corrigido com a referência necessária  
